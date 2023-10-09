@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tutorial",
-    "slug": "tutorial",
+    "name": "02-mini-game",
+    "slug": "02-mini-game",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
