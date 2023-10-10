@@ -1,6 +1,30 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import { useState } from "react";
 const StartGameScreen = () => {
+  const [enteredNumber, setEnteredNumber] = useState("");
+
+  const numberInputHandler = (entered) => {
+    setEnteredNumber(entered);
+  };
+
+  const resetInputHandler = () => {
+    setEnteredNumber("");
+  };
+
+  const confirmInputHandler = () => {
+    const number = parseInt(enteredNumber);
+
+    if (isNaN(number) || number <= 0 || number > 99) {
+      Alert.alert(
+        "Invalid Number!",
+        "Please choose a number between 1 and 99",
+        [{ text: "Okay", style: "destructive", onPress: resetInputHandler }]
+      );
+      return;
+    }
+    console.log("valid num");
+  };
   return (
     <View style={styles.inputContainer}>
       {/* Note: if it is a number, we do maxLength={2} which makes it 2 digits only
@@ -8,12 +32,21 @@ const StartGameScreen = () => {
       <TextInput
         style={styles.numberInput}
         maxLength={2}
+        value={enteredNumber} // 2 way binding
+        // onChange vs onChangeText ?
+        onChangeText={numberInputHandler}
         // by default, the normal keyboard is chosen, here, we
         // make the numberpad keyboard appear instead when we click on the text field
         keyboardType="number-pad"
       />
-      <PrimaryButton>Reset</PrimaryButton>
-      <PrimaryButton>Confirm</PrimaryButton>
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+        </View>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
+        </View>
+      </View>
     </View>
   );
 };
@@ -22,6 +55,8 @@ export default StartGameScreen;
 
 const styles = StyleSheet.create({
   inputContainer: {
+    justifyContent: "center",
+    alignItems: "center",
     marginHorizontal: 24,
     borderRadius: 8,
     padding: 16,
@@ -47,5 +82,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
   },
 });
