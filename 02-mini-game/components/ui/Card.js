@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import Colors from "../../utils/colors";
+import { Dimensions } from "react-native";
 const Card = ({ children }) => {
   return <View style={styles.card}>{children}</View>;
 };
 
 export default Card;
+
+const deviceWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   card: {
@@ -13,7 +16,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     borderRadius: 8,
     padding: 16,
-    marginTop: 36,
+    marginTop: deviceWidth < 380 ? 18 : 36,
     backgroundColor: Colors.primary800,
     // box-shadow doesnt exist for react-native, furthermore,
     // a similar efffect of android and ios is achieved differently,

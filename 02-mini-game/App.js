@@ -60,22 +60,27 @@ export default function App() {
   }
 
   return (
-    // styling for the root screen; subsequent screens will have this background ( i think)
-    <LinearGradient
-      style={styles.rootScreen}
-      colors={[Colors.primary700, Colors.accent500]}
-    >
-      <ImageBackground
-        source={require("./assets/images/background.png")}
-        resizeMode="cover"
+    <>
+      {/* we can style our status bar with this (status bar as in the top of the phone
+      which shows notification, wifi, battery , etc, can only change the colours) */}
+      <StatusBar style="light" />
+      {/* styling for the root screen; subsequent screens will have this background ( i think) */}
+      <LinearGradient
         style={styles.rootScreen}
-        imageStyle={styles.backgroundImage}
+        colors={[Colors.primary700, Colors.accent500]}
       >
-        {/* certain devices may have a notch at the top (e.g. iphone). Safeareaview
+        <ImageBackground
+          source={require("./assets/images/background.png")}
+          resizeMode="cover"
+          style={styles.rootScreen}
+          imageStyle={styles.backgroundImage}
+        >
+          {/* certain devices may have a notch at the top (e.g. iphone). Safeareaview
         automaticallly pushes down the content such that it is not at the notch */}
-        <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
-      </ImageBackground>
-    </LinearGradient>
+          <SafeAreaView style={styles.rootScreen}>{screen}</SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
