@@ -41,3 +41,4 @@
 
   - Styling of the default header and title for the navigation using options prop in Stack.Screen for app.js which will do styling for individual screen OR screenOptions prop in Stack.Navigator which does styling for ALL the screens
   - Nesting navigators (e.g. using both a stack navigator and a drawer navigator)
+  - Using context API to do global state management
