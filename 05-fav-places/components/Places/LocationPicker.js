@@ -39,6 +39,7 @@ function LocationPicker({ onPickLocation }) {
     async function handleLocation() {
       if (pickedLocation) {
         try {
+          // get the address from google maps API based on latitude and longtitude
           const address = await getAddress(
             pickedLocation.lat,
             pickedLocation.lng
@@ -54,26 +55,27 @@ function LocationPicker({ onPickLocation }) {
     handleLocation();
   }, [pickedLocation, onPickLocation]);
 
-  async function verifyPermissions() {
-    if (locationPermissionInformation.status !== PermissionStatus.GRANTED) {
-      const permissionResponse = await requestPermission();
+  async function verifyPermissions(isGetLocation) {
+    if (locationPermissionInformation.status === PermissionStatus.GRANTED)
+      return true;
 
-      return permissionResponse.granted;
-    }
+    // as long as permission not granted, we ask for permission!
+    const permissionResponse = await requestPermission();
+    const isGranted = permissionResponse.granted;
+    if (isGranted) return true;
 
-    if (locationPermissionInformation.status === PermissionStatus.DENIED) {
+    // only if we are getting the location then we show the alert
+    if (isGetLocation) {
       Alert.alert(
         "Insufficient Permissions!",
         "You need to grant location permissions to use this app."
       );
-      return false;
     }
-
-    return true;
+    return false;
   }
 
   async function getLocationHandler() {
-    const hasPermission = await verifyPermissions();
+    const hasPermission = await verifyPermissions(true);
 
     if (!hasPermission) {
       return;
@@ -90,28 +92,13 @@ function LocationPicker({ onPickLocation }) {
   }
 
   async function pickOnMapHandler() {
-    const hasPermission = await verifyPermissions();
-
-    // if dont have permissions, we just navigate to the Map screen
-    // it will then just use a default fallback location as per the code
-    // in Map.js
-    console.log("pemrissions: ", hasPermission);
-    if (!hasPermission) {
-      navigation.navigate("Map");
-      return;
-    }
-
-    // but, if we have permissions, we get the current location of the
-    // phone and set the initial coordinates on the map as the current location
-    const location = await getCurrentPositionAsync();
-    navigation.navigate("Map", {
-      initialLat: location.coords.latitude,
-      initialLng: location.coords.longitude,
-    });
+    navigation.navigate("Map");
   }
 
   let locationPreview = <Text>No location picked yet.</Text>;
 
+  // gets a preview of the map as an image from google api based on the
+  // latitude and longtitude
   if (pickedLocation) {
     locationPreview = (
       <Image

@@ -20,7 +20,11 @@ function Map({ navigation, route }) {
     longitudeDelta: 0.0421,
   };
 
+  // handles the taps on the map
   function selectLocationHandler(event) {
+    // if there was already an initial location, based on how we want to code our app,
+    // this would mean it is a read-only map
+    // thus, we return to prevent any changes when we click on the map
     if (initialLocation) {
       return;
     }
@@ -30,6 +34,9 @@ function Map({ navigation, route }) {
     setSelectedLocation({ lat: lat, lng: lng });
   }
 
+  // useCallBack ensures the function is not recreated unnecessarily
+  // thus, the function only changes if the selectedLocation / navigation changes
+  // thus, preventing unnecessary re-render cycles / infinite loops
   const savePickedLocationHandler = useCallback(() => {
     if (!selectedLocation) {
       Alert.alert(
@@ -46,6 +53,9 @@ function Map({ navigation, route }) {
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {
+    // if have an initial location, it means we are just reading the map only
+    // (based on how we want to code it)
+    // thus, we only add save icon if there was no initialLocation
     if (initialLocation) {
       return;
     }

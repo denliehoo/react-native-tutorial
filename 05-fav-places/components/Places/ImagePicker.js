@@ -16,22 +16,19 @@ function ImagePicker({ onTakeImage }) {
     useCameraPermissions();
 
   async function verifyPermissions() {
+    if (cameraPermissionInformation.status === PermissionStatus.GRANTED)
+      return true;
+
     // as long as permission not granted, we ask for permission!
-    if (cameraPermissionInformation.status !== PermissionStatus.GRANTED) {
-      const permissionResponse = await requestPermission();
+    const permissionResponse = await requestPermission();
+    const isGranted = permissionResponse.granted;
+    if (isGranted) return true;
 
-      return permissionResponse.granted;
-    }
-
-    if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
-      Alert.alert(
-        "Insufficient Permissions!",
-        "You need to grant camera permissions to use this app."
-      );
-      return false;
-    }
-
-    return true;
+    Alert.alert(
+      "Insufficient Permissions!",
+      "You need to grant camera permissions to use this app."
+    );
+    return false;
   }
 
   async function takeImageHandler() {
